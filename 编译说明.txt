@@ -1,0 +1,7 @@
+// windows下双击make_win64生成dll
+
+// linux下编译命令
+g++ kcp.c -shared -fPIC -o libkcp.so
+
+// ndk编译命令
+ndk-build NDK_PROJECT_PATH=. NDK_APPLICATION_MK=Application.mk

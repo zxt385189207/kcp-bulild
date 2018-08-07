@@ -24,7 +24,7 @@ find_path(KCP_PROJECT_DIR NAMES SConstruct
 MARK_AS_ADVANCED(KCP_PROJECT_DIR)
 
 set ( KCP_CORE
-    kcp.c
+    jni/kcp.c
 )
 
 macro(source_group_by_dir proj_dir source_files)

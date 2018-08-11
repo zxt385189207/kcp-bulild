@@ -746,7 +746,7 @@ void ikcp_parse_data(ikcpcb *kcp, IKCPSEG *newseg)
 //---------------------------------------------------------------------
 // input data
 //---------------------------------------------------------------------
-int ikcp_input(ikcpcb *kcp, const char *data, long offset, long size)
+int ikcp_input(ikcpcb *kcp, const char *data, int offset, int size)
 {
 	IUINT32 una = kcp->snd_una;
 	IUINT32 maxack = 0;

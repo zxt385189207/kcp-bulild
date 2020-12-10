@@ -20,7 +20,7 @@
         [DllImport(KcpDLL, CallingConvention=CallingConvention.Cdecl)]
         public static extern uint ikcp_getconv(IntPtr ptr);
         [DllImport(KcpDLL, CallingConvention=CallingConvention.Cdecl)]
-        public static extern int ikcp_input(IntPtr kcp, byte[] data, long size);
+        public static extern int ikcp_input(IntPtr kcp, byte[] data, int offset, int size);
         [DllImport(KcpDLL, CallingConvention=CallingConvention.Cdecl)]
         public static extern int ikcp_nodelay(IntPtr kcp, int nodelay, int interval, int resend, int nc);
         [DllImport(KcpDLL, CallingConvention=CallingConvention.Cdecl)]

@@ -775,7 +775,7 @@ int ikcp_input(ikcpcb *kcp, const char *data, int offset, int size)
 		if (size < (int)IKCP_OVERHEAD) break;
 
 		data = ikcp_decode32u(data, &conv);
-		/*if (conv != kcp->conv) return -1;*/
+		if (conv != kcp->conv) return -1;
 
 		data = ikcp_decode8u(data, &cmd);
 		data = ikcp_decode8u(data, &frg);

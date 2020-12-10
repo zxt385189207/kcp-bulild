@@ -611,7 +611,7 @@ static void ikcp_parse_una(ikcpcb *kcp, IUINT32 una)
 	}
 }
 
-static void ikcp_parse_fastack(ikcpcb *kcp, IUINT32 sn)
+static void ikcp_parse_fastack(ikcpcb *kcp, IUINT32 sn, IUINT32 ts)
 {
 	struct IQUEUEHEAD *p, *next;
 
@@ -625,7 +625,12 @@ static void ikcp_parse_fastack(ikcpcb *kcp, IUINT32 sn)
 			break;
 		}
 		else if (sn != seg->sn) {
+		#ifndef IKCP_FASTACK_CONSERVE
 			seg->fastack++;
+		#else
+			if (_itimediff(ts, seg->ts) >= 0)
+				seg->fastack++;
+		#endif
 		}
 	}
 }
@@ -751,7 +756,7 @@ void ikcp_parse_data(ikcpcb *kcp, IKCPSEG *newseg)
 int ikcp_input(ikcpcb *kcp, const char *data, int offset, int size)
 {
 	IUINT32 prev_una = kcp->snd_una;
-	IUINT32 maxack = 0;
+	IUINT32 maxack = 0, latest_ts = 0;
 	int flag = 0;
 
 	if (ikcp_canlog(kcp, IKCP_LOG_INPUT)) {
@@ -801,10 +806,18 @@ int ikcp_input(ikcpcb *kcp, const char *data, int offset, int size)
 			if (flag == 0) {
 				flag = 1;
 				maxack = sn;
-			}
-			else {
+				latest_ts = ts;
+			}	else {
 				if (_itimediff(sn, maxack) > 0) {
+				#ifndef IKCP_FASTACK_CONSERVE
 					maxack = sn;
+					latest_ts = ts;
+				#else
+					if (_itimediff(ts, latest_ts) > 0) {
+						maxack = sn;
+						latest_ts = ts;
+					}
+				#endif
 				}
 			}
 			if (ikcp_canlog(kcp, IKCP_LOG_IN_ACK)) {
@@ -864,7 +877,7 @@ int ikcp_input(ikcpcb *kcp, const char *data, int offset, int size)
 	}
 
 	if (flag != 0) {
-		ikcp_parse_fastack(kcp, maxack);
+		ikcp_parse_fastack(kcp, maxack, latest_ts);
 	}
 
 	if (_itimediff(kcp->snd_una, prev_una) > 0) {

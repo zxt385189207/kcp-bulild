@@ -1,0 +1,3 @@
+/Users/zhangyinan/Project/kcp-bulild/MacOSBuild/CMakeFiles/kcp.dir
+/Users/zhangyinan/Project/kcp-bulild/MacOSBuild/CMakeFiles/ALL_BUILD.dir
+/Users/zhangyinan/Project/kcp-bulild/MacOSBuild/CMakeFiles/ZERO_CHECK.dir
